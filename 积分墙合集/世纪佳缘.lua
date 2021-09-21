@@ -135,73 +135,73 @@ function _Server_get()
 	}
 	
 end
-dxcode = _Server_get()
---function _Server_get()
---	phone_name = device.name()
---	phone_imei = device.serial_number()
---	log(phone_name)
---	log(phone_imei)
---	return{
---		login=(function()
---			return	
---		end),
---		addBlack=(function()
---			return	
---		end),
---		getPhone = (function()
---				RetStr = get('http://sms.wenfree.cn/public/?s=App.SmsNew.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
---				if RetStr then
---					RetStr = json.decode(RetStr)
---					log(RetStr)
---					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
---						phone = RetStr.data.phone
---						log(phone)
---						local phone_title = (string.sub(phone,1,3))
---						local blackPhone = {'147'}
---						for k,v in ipairs(blackPhone) do
---							if phone_title == v then
---	--							local lx_url =	'http://api.cafebay.cn/api/do.php?action=addBlacklist&sid='..PID..'&phone='..number..'&token='..token
---	--							get(lx_url);
---								log("拉黑->"..number)
---								delay(3)
---								return false
---						end
---				end
+
+function _Server_getnew()
+	phone_name = device.name()
+	phone_imei = device.serial_number()
+	log(phone_name)
+	log(phone_imei)
+	return{
+		login=(function()
+			return	
+		end),
+		addBlack=(function()
+			return	
+		end),
+		getPhone = (function()
+				RetStr = get('http://sms.wenfree.cn/public/?s=App.SmsNew.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
+				if RetStr then
+					RetStr = json.decode(RetStr)
+					log(RetStr)
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						phone = RetStr.data.phone
+						log(phone)
+						local phone_title = (string.sub(phone,1,3))
+						local blackPhone = {'147'}
+						for k,v in ipairs(blackPhone) do
+							if phone_title == v then
+	--							local lx_url =	'http://api.cafebay.cn/api/do.php?action=addBlacklist&sid='..PID..'&phone='..number..'&token='..token
+	--							get(lx_url);
+								log("拉黑->"..number)
+								delay(3)
+								return false
+						end
+				end
 						
---					end
---				else
---					log(RetStr)
---				end
---				delay(3)
---				return phone
---		end),
---		 getMessage=(function()
---			local Msg
---            for i=1,30,1 do
---				sys.msleep(3000)
---				RetStr = get("http://sms.wenfree.cn/public/?s=App.SmsNew.getMessage".."&imei="..phone_imei.."&phonename="..phone_name)
---				if RetStr then
---					RetStr = json.decode(RetStr)
---					log(RetStr)
---					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
---						Msg = RetStr.data.sms
---						if type(tonumber(Msg))== "number" then log(Msg); return Msg 
---						else
---							log(Msg)
---							local i,j = string.find(Msg,"%d+")
---							Msg = string.sub(Msg,i,j)
---							if type(tonumber(Msg))== "number" then log(Msg); return Msg end
---						end
---					end
---				end
---				toast(tostring(RetStr).."\n"..i.."次共25次")
---				delay(3)
---            end
---            return false
---        end),
---	}
+					end
+				else
+					log(RetStr)
+				end
+				delay(3)
+				return phone
+		end),
+		 getMessage=(function()
+			local Msg
+            for i=1,30,1 do
+				sys.msleep(3000)
+				RetStr = get("http://sms.wenfree.cn/public/?s=App.SmsNew.getMessage".."&imei="..phone_imei.."&phonename="..phone_name)
+				if RetStr then
+					RetStr = json.decode(RetStr)
+					log(RetStr)
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						Msg = RetStr.data.sms
+						if type(tonumber(Msg))== "number" then log(Msg); return Msg 
+						else
+							log(Msg)
+							local i,j = string.find(Msg,"%d+")
+							Msg = string.sub(Msg,i,j)
+							if type(tonumber(Msg))== "number" then log(Msg); return Msg end
+						end
+					end
+				end
+				toast(tostring(RetStr).."\n"..i.."次共25次")
+				delay(3)
+            end
+            return false
+        end),
+	}
 	
---end
+end
 --dxcode = _Server_get()
 --营业厅平台
 function _vCode_yyt() --营业厅平台
@@ -781,6 +781,12 @@ function main(v)
 	bid[work]={}
 	bid[work]['adid'] = v.adid or ''
 	bid[work]['appbid']=v.appbid
+	bid[work]['note']=v.note
+	if bid[work]['note'] == "新" then
+		dxcode = _Server_getnew()
+	elseif bid[work]['note'] == "旧" then
+		dxcode = _Server_get()
+	end
 	vpnx()
 	delay(3)
 	if false or vpn() then
