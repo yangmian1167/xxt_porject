@@ -622,6 +622,13 @@ function fix()
 							click(185, 986)
 						end
 						click(489, 988)
+					elseif bid[work]['adid'] == '越南' then
+						for i = 1 , 37 do
+							click(185, 986)
+						end
+						for i = 1 , 31 do
+							click(489, 988)	
+						end	
 					else
 						--指定城市
 						随机地区 = math.random(1,8)
